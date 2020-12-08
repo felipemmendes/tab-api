@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import ShowUserRestaurant from '../../services/ShowUserRestaurant';
 import ListUserRestaurants from '../../services/ListUserRestaurants';
 import CreateUserRestaurant from '../../services/CreateUserRestaurant';
+import UpdateUserRestaurant from '../../services/UpdateUserRestaurant';
 
 class RestaurantController {
   public async index(req: Request, res: Response): Promise<Response> {
@@ -41,6 +42,22 @@ class RestaurantController {
     });
 
     return res.json(restaurant);
+  }
+
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { userId } = req.user;
+    const { restaurantId } = req.params;
+    const { restaurantOptions } = req.body;
+
+    const updateUserRestaurants = new UpdateUserRestaurant();
+
+    await updateUserRestaurants.execute({
+      userId,
+      restaurantId,
+      restaurantOptions,
+    });
+
+    return res.sendStatus(200);
   }
 }
 

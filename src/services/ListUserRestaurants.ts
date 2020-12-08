@@ -14,6 +14,7 @@ class ListUserRestaurants {
       where: {
         user_id: userId,
       },
+      relations: ['detail'],
     });
 
     return restaurants;

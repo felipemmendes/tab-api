@@ -10,13 +10,14 @@ const restaurantController = new RestaurantController();
 const visitController = new VisitController();
 
 restaurantRouter.get('/', restaurantController.index);
+restaurantRouter.post('/', restaurantController.create);
 restaurantRouter.get('/:restaurantId', restaurantController.show);
+restaurantRouter.post('/:restaurantId', visitController.create);
+restaurantRouter.put('/:restaurantId', restaurantController.update);
 restaurantRouter.get('/:restaurantId/products', productController.index);
 restaurantRouter.get(
   '/:restaurantId/products/:productId',
   productController.show,
 );
-restaurantRouter.post('/', restaurantController.create);
-restaurantRouter.post('/:restaurantId', visitController.create);
 
 export default restaurantRouter;

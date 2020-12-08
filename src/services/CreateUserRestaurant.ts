@@ -2,7 +2,6 @@ import { getRepository } from 'typeorm';
 import slugify from 'slugify';
 
 import Restaurant from '../database/models/Restaurant';
-import RestaurantDetail from '../database/models/RestaurantDetail';
 import CustomError from '../errors/CustomError';
 
 interface Request {
@@ -25,7 +24,6 @@ class CreateUserRestaurant {
     restaurantOptions,
   }: Request): Promise<Restaurant> {
     const restaurantRepository = getRepository(Restaurant);
-    const restaurantDetailRepository = getRepository(RestaurantDetail);
 
     const { name, restaurantDetail } = restaurantOptions;
     const nameSlug = slugify(name, {
@@ -47,15 +45,11 @@ class CreateUserRestaurant {
       });
     }
 
-    const detail = restaurantDetailRepository.create(restaurantDetail);
-
-    const { id: detail_id } = await restaurantDetailRepository.save(detail);
-
     const restaurant = restaurantRepository.create({
       name,
       name_slug: nameSlug,
       user_id: userId,
-      detail_id,
+      detail: restaurantDetail,
     });
 
     await restaurantRepository.save(restaurant);

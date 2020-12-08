@@ -37,7 +37,7 @@ class Restaurant {
   @Column()
   detail_id: string;
 
-  @OneToOne(() => RestaurantDetail)
+  @OneToOne(() => RestaurantDetail, { cascade: true })
   @JoinColumn({ name: 'detail_id' })
   detail: RestaurantDetail;
 
