@@ -5,13 +5,11 @@ import ShowRestaurantProduct from '../../services/ShowRestaurantProduct';
 
 class ProductController {
   public async index(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.user;
-    const { restaurantId } = req.params;
+    const { id: restaurantId } = req.restaurant.restaurant;
 
     const listRestaurantProducts = new ListRestaurantProducts();
 
     const products = await listRestaurantProducts.execute({
-      userId,
       restaurantId,
     });
 
@@ -19,13 +17,12 @@ class ProductController {
   }
 
   public async show(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.user;
-    const { restaurantId, productId } = req.params;
+    const { id: restaurantId } = req.restaurant.restaurant;
+    const { productId } = req.params;
 
     const showRestaurantProduct = new ShowRestaurantProduct();
 
     const product = await showRestaurantProduct.execute({
-      userId,
       restaurantId,
       productId,
     });

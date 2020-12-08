@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import ShowUserRestaurant from '../../services/ShowUserRestaurant';
 import ListUserRestaurants from '../../services/ListUserRestaurants';
 import CreateUserRestaurant from '../../services/CreateUserRestaurant';
 import UpdateUserRestaurant from '../../services/UpdateUserRestaurant';
@@ -17,15 +16,7 @@ class RestaurantController {
   }
 
   public async show(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.user;
-    const { restaurantId } = req.params;
-
-    const showUserRestaurant = new ShowUserRestaurant();
-
-    const restaurant = await showUserRestaurant.execute({
-      userId,
-      restaurantId,
-    });
+    const { restaurant } = req.restaurant;
 
     return res.json(restaurant);
   }
@@ -45,15 +36,13 @@ class RestaurantController {
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    const { userId } = req.user;
-    const { restaurantId } = req.params;
+    const { restaurant } = req.restaurant;
     const { restaurantOptions } = req.body;
 
     const updateUserRestaurants = new UpdateUserRestaurant();
 
     await updateUserRestaurants.execute({
-      userId,
-      restaurantId,
+      restaurant,
       restaurantOptions,
     });
 

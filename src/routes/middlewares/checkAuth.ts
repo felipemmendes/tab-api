@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 
@@ -38,9 +38,7 @@ const checkAuth = async (
       },
     });
 
-    req.user = {
-      userId: sub,
-    };
+    req.user.userId = sub;
 
     return next();
   } catch {

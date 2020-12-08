@@ -5,7 +5,7 @@ import CreateVisit from '../../services/CreateVisit';
 class VisitController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
-    const { restaurantId } = req.params;
+    const { id: restaurantId } = req.restaurant.restaurant;
     const { visitOptions } = req.body;
 
     const createVisit = new CreateVisit();
@@ -18,6 +18,22 @@ class VisitController {
 
     return res.status(200).json(restaurantVisit);
   }
+
+  // public async index(req: Request, res: Response): Promise<Response> {
+  //   const { userId } = req.user;
+  //   const { restaurantId } = req.params;
+  //   const { visitOptions } = req.body;
+
+  //   const createVisit = new CreateVisit();
+
+  //   const restaurantVisit = await createVisit.execute({
+  //     userId,
+  //     restaurantId,
+  //     visitOptions,
+  //   });
+
+  //   return res.status(200).json(restaurantVisit);
+  // }
 }
 
 export default VisitController;

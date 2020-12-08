@@ -4,14 +4,12 @@ import RestaurantProduct from '../database/models/RestaurantProduct';
 import CustomError from '../errors/CustomError';
 
 interface Request {
-  userId: string;
   restaurantId: string;
   productId: string;
 }
 
 class ShowRestaurantProduct {
   public async execute({
-    userId,
     restaurantId,
     productId,
   }: Request): Promise<RestaurantProduct> {
@@ -25,7 +23,6 @@ class ShowRestaurantProduct {
         .innerJoin('p.orders', 'o')
         .where('p.id = :productId', { productId })
         .andWhere('p.restaurant_id = :restaurantId', { restaurantId })
-        .andWhere('r.user_id = :userId', { userId })
         .getOneOrFail();
 
       return product;

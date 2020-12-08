@@ -1,44 +1,36 @@
-import { getRepository } from 'typeorm';
+import { getManager } from 'typeorm';
 import slugify from 'slugify';
 
 import Restaurant from '../database/models/Restaurant';
 import RestaurantDetail from '../database/models/RestaurantDetail';
-import CustomError from '../errors/CustomError';
 
 interface Request {
-  userId: string;
-  restaurantId: string;
+  restaurant: Restaurant;
   restaurantOptions: {
     name: string;
-    restaurantDetail: {
-      description: string;
-      website: string;
-      instagram: string;
-      contact_number: string;
-      menu: string;
-    };
+    description: string;
+    website: string;
+    instagram: string;
+    contact_number: string;
+    menu: string;
   };
 }
 
 class UpdateUserRestaurant {
   public async execute({
-    userId,
-    restaurantId,
+    restaurant,
     restaurantOptions,
-  }: Request): Promise<boolean> {
-    const restaurantRepository = getRepository(Restaurant);
-    const restaurantDetailRepository = getRepository(RestaurantDetail);
-
-    const { name, restaurantDetail } = restaurantOptions;
+  }: Request): Promise<void> {
     const {
+      name,
       contact_number,
       description,
       instagram,
       menu,
       website,
-    } = restaurantDetail;
+    } = restaurantOptions;
 
-    let nameSlug;
+    let nameSlug = '';
 
     if (name) {
       nameSlug = slugify(name, {
@@ -47,46 +39,34 @@ class UpdateUserRestaurant {
       });
     }
 
-    const exists = await restaurantRepository.findOne({
-      where: {
-        user_id: userId,
-        id: restaurantId,
-      },
+    await getManager().transaction(async entityManager => {
+      await entityManager.update(
+        Restaurant,
+        {
+          id: restaurant.id,
+        },
+        {
+          ...(name && {
+            name,
+            name_slug: nameSlug,
+          }),
+        },
+      );
+
+      await entityManager.update(
+        RestaurantDetail,
+        {
+          id: restaurant.detail_id,
+        },
+        {
+          ...(contact_number && { contact_number }),
+          ...(description && { description }),
+          ...(instagram && { instagram }),
+          ...(menu && { menu }),
+          ...(website && { website }),
+        },
+      );
     });
-
-    if (!exists) {
-      throw new CustomError({
-        message: 'Restaurant not found',
-        statusCode: 404,
-      });
-    }
-
-    await restaurantRepository.update(
-      {
-        id: restaurantId,
-      },
-      {
-        ...(name && {
-          name,
-          nameSlug,
-        }),
-      },
-    );
-
-    await restaurantDetailRepository.update(
-      {
-        id: exists.detail_id,
-      },
-      {
-        ...(contact_number && { contact_number }),
-        ...(description && { description }),
-        ...(instagram && { instagram }),
-        ...(menu && { menu }),
-        ...(website && { website }),
-      },
-    );
-
-    return true;
   }
 }
 

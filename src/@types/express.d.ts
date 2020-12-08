@@ -3,5 +3,8 @@ declare namespace Express {
     user: {
       userId: string;
     };
+    restaurant: {
+      restaurant: import('../database/models/Restaurant').default;
+    };
   }
 }
