@@ -22,20 +22,30 @@ restaurantRouter.post(
   checkPermission,
   visitController.create,
 );
-restaurantRouter.get(
-  '/:restaurantId/visits',
-  checkPermission,
-  visitController.index,
-);
 restaurantRouter.put(
   '/:restaurantId',
   checkPermission,
   restaurantController.update,
 );
 restaurantRouter.get(
+  '/:restaurantId/visits',
+  checkPermission,
+  visitController.index,
+);
+restaurantRouter.get(
+  '/:restaurantId/visits/:visitId',
+  checkPermission,
+  visitController.show,
+);
+restaurantRouter.get(
   '/:restaurantId/products',
   checkPermission,
   productController.index,
+);
+restaurantRouter.post(
+  '/:restaurantId/products',
+  checkPermission,
+  productController.create,
 );
 restaurantRouter.get(
   '/:restaurantId/products/:productId',

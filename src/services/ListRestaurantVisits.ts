@@ -12,18 +12,7 @@ class ListRestaurantVisits {
 
     const visits = await visitRepository
       .createQueryBuilder('v')
-      .select([
-        'v.id',
-        'v.date',
-        'v.comments',
-        'v.score',
-        'v.order_total',
-        'o.product_value',
-        'o.product_quantity',
-        'p.name',
-      ])
-      .innerJoin('v.order', 'o')
-      .innerJoin('o.product', 'p')
+      .select(['v.id', 'v.date', 'v.comments', 'v.score', 'v.order_total'])
       .where('v.restaurant_id = :restaurantId', { restaurantId })
       .getMany();
 

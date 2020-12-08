@@ -1,9 +1,24 @@
 import { Request, Response } from 'express';
 
+import CreateRestaurantProduct from '../../services/CreateRestaurantProduct';
 import ListRestaurantProducts from '../../services/ListRestaurantProducts';
 import ShowRestaurantProduct from '../../services/ShowRestaurantProduct';
 
 class ProductController {
+  public async create(req: Request, res: Response): Promise<Response> {
+    const { id: restaurantId } = req.restaurant.restaurant;
+    const { product_name } = req.body;
+
+    const createRestaurantProduct = new CreateRestaurantProduct();
+
+    const product = await createRestaurantProduct.execute({
+      restaurantId,
+      product_name,
+    });
+
+    return res.json(product);
+  }
+
   public async index(req: Request, res: Response): Promise<Response> {
     const { id: restaurantId } = req.restaurant.restaurant;
 
