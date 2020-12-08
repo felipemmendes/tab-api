@@ -34,6 +34,12 @@ class RestaurantVisit {
   )
   order: OrderProduct[];
 
+  @Column('decimal', {
+    precision: 6,
+    scale: 2,
+  })
+  order_total: number;
+
   @Column()
   restaurant_id: string;
 

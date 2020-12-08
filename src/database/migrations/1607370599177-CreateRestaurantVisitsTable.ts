@@ -32,6 +32,12 @@ export default class CreateRestaurantVisitsTable1607370599177
             type: 'varchar',
           },
           {
+            name: 'order_total',
+            type: 'decimal',
+            precision: 6,
+            scale: 2,
+          },
+          {
             name: 'restaurant_id',
             type: 'uuid',
           },

@@ -22,6 +22,11 @@ restaurantRouter.post(
   checkPermission,
   visitController.create,
 );
+restaurantRouter.get(
+  '/:restaurantId/visits',
+  checkPermission,
+  visitController.index,
+);
 restaurantRouter.put(
   '/:restaurantId',
   checkPermission,

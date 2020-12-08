@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
-import CreateVisit from '../../services/CreateVisit';
+import CreateRestaurantVisit from '../../services/CreateRestaurantVisit';
+import ListRestaurantVisits from '../../services/ListRestaurantVisits';
 
 class VisitController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -8,9 +9,9 @@ class VisitController {
     const { id: restaurantId } = req.restaurant.restaurant;
     const { visitOptions } = req.body;
 
-    const createVisit = new CreateVisit();
+    const createRestaurantVisit = new CreateRestaurantVisit();
 
-    const restaurantVisit = await createVisit.execute({
+    const restaurantVisit = await createRestaurantVisit.execute({
       userId,
       restaurantId,
       visitOptions,
@@ -19,21 +20,17 @@ class VisitController {
     return res.status(200).json(restaurantVisit);
   }
 
-  // public async index(req: Request, res: Response): Promise<Response> {
-  //   const { userId } = req.user;
-  //   const { restaurantId } = req.params;
-  //   const { visitOptions } = req.body;
+  public async index(req: Request, res: Response): Promise<Response> {
+    const { id: restaurantId } = req.restaurant.restaurant;
 
-  //   const createVisit = new CreateVisit();
+    const listRestaurantVisits = new ListRestaurantVisits();
 
-  //   const restaurantVisit = await createVisit.execute({
-  //     userId,
-  //     restaurantId,
-  //     visitOptions,
-  //   });
+    const restaurantVisit = await listRestaurantVisits.execute({
+      restaurantId,
+    });
 
-  //   return res.status(200).json(restaurantVisit);
-  // }
+    return res.status(200).json(restaurantVisit);
+  }
 }
 
 export default VisitController;

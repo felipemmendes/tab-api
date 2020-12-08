@@ -24,7 +24,10 @@ class OrderProduct {
     precision: 6,
     scale: 2,
   })
-  value: number;
+  product_value: number;
+
+  @Column()
+  product_quantity: number;
 
   @Column()
   restaurant_visit_id: string;

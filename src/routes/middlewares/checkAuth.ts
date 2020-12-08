@@ -38,7 +38,9 @@ const checkAuth = async (
       },
     });
 
-    req.user.userId = sub;
+    req.user = {
+      userId: sub,
+    };
 
     return next();
   } catch {

@@ -24,10 +24,14 @@ export default class CreateOrderProductsTable1607370631175
             type: 'uuid',
           },
           {
-            name: 'value',
+            name: 'product_value',
             type: 'decimal',
             precision: 6,
             scale: 2,
+          },
+          {
+            name: 'product_quantity',
+            type: 'int',
           },
           {
             name: 'restaurant_visit_id',

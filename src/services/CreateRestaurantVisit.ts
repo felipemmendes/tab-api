@@ -10,7 +10,8 @@ interface Request {
   visitOptions: {
     order: {
       product: string;
-      value: number;
+      product_value: number;
+      product_quantity: number;
     }[];
     score: number;
     comments: string;
@@ -31,6 +32,9 @@ class CreateVisit {
         comments,
         score,
         date,
+        order_total: order.reduce((acc, curr) => {
+          return acc + curr.product_quantity * curr.product_value;
+        }, 0),
       });
 
       await entityManager.save(RestaurantVisit, restaurantVisit);
@@ -62,7 +66,8 @@ class CreateVisit {
       const orderProducts = order.map(o => {
         return entityManager.create(OrderProduct, {
           product_id: allOrderProducts.find(p => p.name === o.product)!.id,
-          value: o.value,
+          product_value: o.product_value,
+          product_quantity: o.product_quantity,
           restaurant_visit_id: restaurantVisit!.id,
         });
       });
