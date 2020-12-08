@@ -1,18 +1,10 @@
 import { Router } from 'express';
-import { classToClass } from 'class-transformer';
 
-import CreateSession from '../services/CreateSession';
+import SessionController from './controllers/SessionController';
 
 const sessionRoutes = Router();
+const sessionController = new SessionController();
 
-sessionRoutes.post('/', async (req, res) => {
-  const { username, password } = req.body;
-
-  const createSession = new CreateSession();
-
-  const { user, token } = await createSession.execute({ username, password });
-
-  res.status(200).json({ user: classToClass(user), token });
-});
+sessionRoutes.post('/', sessionController.create);
 
 export default sessionRoutes;

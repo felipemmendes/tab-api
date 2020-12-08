@@ -1,27 +1,35 @@
 import { getRepository } from 'typeorm';
 
 import Restaurant from '../database/models/Restaurant';
+import CustomError from '../errors/CustomError';
 
 interface Request {
   userId: string;
-  restaurantSlug: string;
+  restaurantId: string;
 }
 
 class ListUserRestaurant {
   public async execute({
     userId,
-    restaurantSlug,
+    restaurantId,
   }: Request): Promise<Restaurant | undefined> {
     const restaurantRepository = getRepository(Restaurant);
 
-    const restaurant = await restaurantRepository.findOne({
-      where: {
-        user_id: userId,
-        name_slug: restaurantSlug,
-      },
-    });
+    try {
+      const restaurant = await restaurantRepository.findOneOrFail({
+        where: {
+          user_id: userId,
+          id: restaurantId || -1,
+        },
+      });
 
-    return restaurant;
+      return restaurant;
+    } catch {
+      throw new CustomError({
+        message: 'Restaurant not found',
+        statusCode: 404,
+      });
+    }
   }
 }
 

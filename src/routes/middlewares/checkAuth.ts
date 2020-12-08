@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { verify } from 'jsonwebtoken';
 
+import User from '../../database/models/User';
 import authConfig from '../../config/auth';
 import CustomError from '../../errors/CustomError';
 
@@ -10,7 +12,11 @@ interface TokenPayload {
   sub: string;
 }
 
-const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
+const checkAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -21,9 +27,16 @@ const checkAuth = (req: Request, res: Response, next: NextFunction): void => {
   const { secret } = authConfig.jwt;
 
   try {
+    const userRepository = getRepository(User);
     const tokenDecoded = verify(token, secret) as TokenPayload;
 
     const { sub } = tokenDecoded;
+
+    await userRepository.findOneOrFail({
+      where: {
+        id: sub || -1,
+      },
+    });
 
     req.user = {
       userId: sub,

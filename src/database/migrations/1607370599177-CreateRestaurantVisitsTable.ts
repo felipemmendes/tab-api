@@ -5,33 +5,35 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateRestaurantTables1607358808674
+export default class CreateRestaurantVisitsTable1607370599177
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'restaurants',
+        name: 'restaurant_visits',
         columns: [
           {
             name: 'id',
             type: 'uuid',
+            isPrimary: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
-            isUnique: true,
           },
           {
-            name: 'name',
+            name: 'date',
+            type: 'timestamp',
+          },
+          {
+            name: 'score',
+            type: 'integer',
+          },
+          {
+            name: 'comments',
             type: 'varchar',
           },
           {
-            name: 'name_slug',
-            type: 'varchar',
-            isPrimary: true,
-          },
-          {
-            name: 'user_id',
+            name: 'restaurant_id',
             type: 'uuid',
-            isPrimary: true,
           },
           {
             name: 'created_at',
@@ -48,12 +50,12 @@ export default class CreateRestaurantTables1607358808674
     );
 
     await queryRunner.createForeignKey(
-      'restaurants',
+      'restaurant_visits',
       new TableForeignKey({
-        name: 'restaurant_user',
-        columnNames: ['user_id'],
+        name: 'restaurant_visit',
+        columnNames: ['restaurant_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'restaurants',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }),
@@ -61,7 +63,7 @@ export default class CreateRestaurantTables1607358808674
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('restaurants', 'restaurant_user');
-    await queryRunner.dropTable('restaurants');
+    await queryRunner.dropForeignKey('restaurant_visits', 'restaurant_visit');
+    await queryRunner.dropTable('restaurant_visits');
   }
 }

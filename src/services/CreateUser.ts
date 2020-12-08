@@ -19,7 +19,7 @@ class CreateUser {
 
     if (userExists) {
       throw new CustomError({
-        message: 'Username not available',
+        message: 'Username is not available',
         statusCode: 422,
       });
     }

@@ -28,7 +28,8 @@
     "class-methods-use-this": "off",
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "_"
-    }]
+    }],
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "settings": {
     "import/resolver": {
