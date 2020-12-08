@@ -1,8 +1,8 @@
 import { getRepository, In } from 'typeorm';
 
-import Product from '../database/models/Product';
 import OrderProduct from '../database/models/OrderProduct';
 import Restaurant from '../database/models/Restaurant';
+import RestaurantProduct from '../database/models/RestaurantProduct';
 import RestaurantVisit from '../database/models/RestaurantVisit';
 import CustomError from '../errors/CustomError';
 
@@ -26,9 +26,9 @@ class CreateVisit {
     restaurantId,
     visitOptions: { order, score, comments, date },
   }: Request): Promise<RestaurantVisit> {
-    const productRepository = getRepository(Product);
     const orderProductRepository = getRepository(OrderProduct);
     const restaurantRepository = getRepository(Restaurant);
+    const restaurantProductRepository = getRepository(RestaurantProduct);
     const restaurantVisitRepository = getRepository(RestaurantVisit);
 
     const restaurantExists = await restaurantRepository.findOne({
@@ -56,9 +56,10 @@ class CreateVisit {
 
     const orderProductsNames = order.map(o => o.product);
 
-    const existentProducts = await productRepository.find({
+    const existentProducts = await restaurantProductRepository.find({
       where: {
         name: In(orderProductsNames),
+        restaurant_id: restaurantId,
       },
     });
 
@@ -68,12 +69,15 @@ class CreateVisit {
       .filter(product => !existentProductsNames.includes(product))
       .filter((value, index, self) => self.indexOf(value) === index)
       .map(product =>
-        productRepository.create({
+        restaurantProductRepository.create({
           name: product,
+          restaurant_id: restaurantId,
         }),
       );
 
-    const createdProducts = await productRepository.save(productsToCreate);
+    const createdProducts = await restaurantProductRepository.save(
+      productsToCreate,
+    );
 
     const allOrderProducts = [...existentProducts, ...createdProducts];
 

@@ -8,11 +8,8 @@ interface Request {
   restaurantId: string;
 }
 
-class ListUserRestaurant {
-  public async execute({
-    userId,
-    restaurantId,
-  }: Request): Promise<Restaurant | undefined> {
+class ShowUserRestaurant {
+  public async execute({ userId, restaurantId }: Request): Promise<Restaurant> {
     const restaurantRepository = getRepository(Restaurant);
 
     try {
@@ -33,4 +30,4 @@ class ListUserRestaurant {
   }
 }
 
-export default ListUserRestaurant;
+export default ShowUserRestaurant;

@@ -38,7 +38,7 @@ class RestaurantVisit {
   restaurant_id: string;
 
   @ManyToOne(() => Restaurant, restaurant => restaurant.restaurant_visits)
-  @JoinColumn({ name: 'restaurant_id' })
+  @JoinColumn({ name: 'restaurant_id', referencedColumnName: 'id' })
   restaurant: Restaurant;
 
   @CreateDateColumn()

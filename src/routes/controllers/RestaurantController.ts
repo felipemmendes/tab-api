@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import ListUserRestaurant from '../../services/ListUserRestaurant';
+import ShowUserRestaurant from '../../services/ShowUserRestaurant';
 import ListUserRestaurants from '../../services/ListUserRestaurants';
 import CreateUserRestaurant from '../../services/CreateUserRestaurant';
 
@@ -19,9 +19,9 @@ class RestaurantController {
     const { userId } = req.user;
     const { restaurantId } = req.params;
 
-    const listUserRestaurant = new ListUserRestaurant();
+    const showUserRestaurant = new ShowUserRestaurant();
 
-    const restaurant = await listUserRestaurant.execute({
+    const restaurant = await showUserRestaurant.execute({
       userId,
       restaurantId,
     });

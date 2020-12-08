@@ -14,8 +14,6 @@ class ListUserRestaurants {
       where: {
         user_id: userId,
       },
-      relations: ['restaurant_visits'],
-      loadEagerRelations: true,
     });
 
     return restaurants;

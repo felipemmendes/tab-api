@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import Product from './Product';
+import RestaurantProduct from './RestaurantProduct';
 import RestaurantVisit from './RestaurantVisit';
 
 @Entity('order_products')
@@ -16,11 +16,9 @@ class OrderProduct {
   @Column()
   product_id: string;
 
-  @ManyToOne(() => Product, product => product.orders, {
-    eager: true,
-  })
+  @ManyToOne(() => RestaurantProduct, product => product.orders)
   @JoinColumn({ name: 'product_id' })
-  product: Product;
+  product: RestaurantProduct;
 
   @Column('decimal', {
     precision: 6,

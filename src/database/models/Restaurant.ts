@@ -13,6 +13,7 @@ import {
 import User from './User';
 import RestaurantDetail from './RestaurantDetail';
 import RestaurantVisit from './RestaurantVisit';
+import RestaurantProduct from './RestaurantProduct';
 
 @Entity('restaurants')
 class Restaurant {
@@ -36,12 +37,15 @@ class Restaurant {
   @Column()
   detail_id: string;
 
-  @OneToOne(() => RestaurantDetail, { eager: true })
+  @OneToOne(() => RestaurantDetail)
   @JoinColumn({ name: 'detail_id' })
   detail: RestaurantDetail;
 
-  @OneToMany(() => RestaurantVisit, visit => visit.restaurant, { eager: true })
+  @OneToMany(() => RestaurantVisit, visit => visit.restaurant)
   restaurant_visits: RestaurantVisit[];
+
+  @OneToMany(() => RestaurantProduct, products => products.restaurant)
+  restaurant_products: RestaurantProduct[];
 
   @CreateDateColumn()
   created_at: Date;
