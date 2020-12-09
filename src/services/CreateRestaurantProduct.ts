@@ -1,5 +1,6 @@
-import { getRepository } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import RestaurantProduct from '../database/models/RestaurantProduct';
+import RestaurantProductRepository from '../database/repositories/RestaurantProductRepository';
 
 interface Request {
   restaurantId: string;
@@ -11,14 +12,14 @@ class CreateRestaurantProduct {
     restaurantId,
     product_name,
   }: Request): Promise<RestaurantProduct> {
-    const restaurantProductRepository = getRepository(RestaurantProduct);
+    const restaurantProductRepository = getCustomRepository(
+      RestaurantProductRepository,
+    );
 
-    const product = restaurantProductRepository.create({
-      name: product_name,
-      restaurant_id: restaurantId,
+    const product = await restaurantProductRepository.findOneOrCreate({
+      restaurantId,
+      product_name,
     });
-
-    await restaurantProductRepository.save(product);
 
     return product;
   }

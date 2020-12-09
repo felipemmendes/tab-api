@@ -3,11 +3,12 @@ import { Request, Response } from 'express';
 import CreateRestaurantVisit from '../../services/CreateRestaurantVisit';
 import ListRestaurantVisits from '../../services/ListRestaurantVisits';
 import ShowRestaurantVisit from '../../services/ShowRestaurantVisit';
+import UpdateRestaurantVisit from '../../services/UpdateRestaurantVisit';
 
 class VisitController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
-    const { id: restaurantId } = req.restaurant.restaurant;
+    const { restaurantId } = req.restaurant;
     const { visitOptions } = req.body;
 
     const createRestaurantVisit = new CreateRestaurantVisit();
@@ -22,7 +23,7 @@ class VisitController {
   }
 
   public async index(req: Request, res: Response): Promise<Response> {
-    const { id: restaurantId } = req.restaurant.restaurant;
+    const { restaurantId } = req.restaurant;
 
     const listRestaurantVisits = new ListRestaurantVisits();
 
@@ -43,6 +44,17 @@ class VisitController {
     });
 
     return res.status(200).json(restaurantVisit);
+  }
+
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { visitId } = req.params;
+    const { visitOptions } = req.body;
+
+    const updateRestaurantVisit = new UpdateRestaurantVisit();
+
+    await updateRestaurantVisit.execute({ visitId, visitOptions });
+
+    return res.sendStatus(200);
   }
 }
 

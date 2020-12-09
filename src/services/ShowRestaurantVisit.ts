@@ -19,6 +19,7 @@ class ShowRestaurantVisit {
           'v.comments',
           'v.score',
           'v.order_total',
+          'o.id',
           'o.product_value',
           'o.product_quantity',
           'p.name',

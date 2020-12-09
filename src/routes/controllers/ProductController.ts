@@ -6,7 +6,7 @@ import ShowRestaurantProduct from '../../services/ShowRestaurantProduct';
 
 class ProductController {
   public async create(req: Request, res: Response): Promise<Response> {
-    const { id: restaurantId } = req.restaurant.restaurant;
+    const { restaurantId } = req.restaurant;
     const { product_name } = req.body;
 
     const createRestaurantProduct = new CreateRestaurantProduct();
@@ -20,7 +20,7 @@ class ProductController {
   }
 
   public async index(req: Request, res: Response): Promise<Response> {
-    const { id: restaurantId } = req.restaurant.restaurant;
+    const { restaurantId } = req.restaurant;
 
     const listRestaurantProducts = new ListRestaurantProducts();
 
@@ -32,7 +32,7 @@ class ProductController {
   }
 
   public async show(req: Request, res: Response): Promise<Response> {
-    const { id: restaurantId } = req.restaurant.restaurant;
+    const { restaurantId } = req.restaurant;
     const { productId } = req.params;
 
     const showRestaurantProduct = new ShowRestaurantProduct();

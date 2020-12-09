@@ -5,7 +5,8 @@ import Restaurant from '../database/models/Restaurant';
 import RestaurantDetail from '../database/models/RestaurantDetail';
 
 interface Request {
-  restaurant: Restaurant;
+  restaurantId: string;
+  restaurantDetailId: string;
   restaurantOptions: {
     name: string;
     description: string;
@@ -18,7 +19,8 @@ interface Request {
 
 class UpdateUserRestaurant {
   public async execute({
-    restaurant,
+    restaurantId,
+    restaurantDetailId,
     restaurantOptions,
   }: Request): Promise<void> {
     const {
@@ -43,7 +45,7 @@ class UpdateUserRestaurant {
       await entityManager.update(
         Restaurant,
         {
-          id: restaurant.id,
+          id: restaurantId,
         },
         {
           ...(name && {
@@ -56,7 +58,7 @@ class UpdateUserRestaurant {
       await entityManager.update(
         RestaurantDetail,
         {
-          id: restaurant.detail_id,
+          id: restaurantDetailId,
         },
         {
           ...(contact_number && { contact_number }),

@@ -26,8 +26,7 @@ class ShowRestaurantProduct {
           'o.product_quantity',
           'o.restaurant_visit_id',
         ])
-        .innerJoin('p.restaurant', 'r')
-        .innerJoin('p.orders', 'o')
+        .leftJoin('p.orders', 'o')
         .where('p.id = :productId', { productId })
         .andWhere('p.restaurant_id = :restaurantId', { restaurantId })
         .getOneOrFail();

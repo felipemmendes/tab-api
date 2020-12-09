@@ -1,15 +1,15 @@
-import { getManager, In } from 'typeorm';
+import { getManager } from 'typeorm';
 
-import OrderProduct from '../database/models/OrderProduct';
-import RestaurantProduct from '../database/models/RestaurantProduct';
 import RestaurantVisit from '../database/models/RestaurantVisit';
+import RestaurantProductRepository from '../database/repositories/RestaurantProductRepository';
+import OrderProductRepository from '../database/repositories/OrderProductRepository';
 
 interface Request {
   userId: string;
   restaurantId: string;
   visitOptions: {
     order: {
-      product: string;
+      product_name: string;
       product_value: number;
       product_quantity: number;
     }[];
@@ -24,60 +24,38 @@ class CreateVisit {
     restaurantId,
     visitOptions: { order, score, comments, date },
   }: Request): Promise<RestaurantVisit> {
-    let restaurantVisit: RestaurantVisit | undefined;
-
-    await getManager().transaction(async entityManager => {
-      restaurantVisit = entityManager.create(RestaurantVisit, {
-        restaurant_id: restaurantId,
-        comments,
-        score,
-        date,
-        order_total: order.reduce((acc, curr) => {
-          return acc + curr.product_quantity * curr.product_value;
-        }, 0),
-      });
-
-      await entityManager.save(RestaurantVisit, restaurantVisit);
-
-      const orderProductsNames = order.map(o => o.product);
-      const existentProducts = await entityManager.find(RestaurantProduct, {
-        where: {
-          name: In(orderProductsNames),
+    const restaurantVisit = await getManager().transaction(
+      async entityManager => {
+        const newVisit = entityManager.create(RestaurantVisit, {
           restaurant_id: restaurantId,
-        },
-      });
-      const existentProductsNames = existentProducts.map(
-        product => product.name,
-      );
-      const productsToCreate = orderProductsNames
-        .filter(product => !existentProductsNames.includes(product))
-        .filter((value, index, self) => self.indexOf(value) === index)
-        .map(product =>
-          entityManager.create(RestaurantProduct, {
-            name: product,
-            restaurant_id: restaurantId,
-          }),
-        );
-      const createdProducts = await entityManager.save(
-        RestaurantProduct,
-        productsToCreate,
-      );
-      const allOrderProducts = [...existentProducts, ...createdProducts];
-      const orderProducts = order.map(o => {
-        return entityManager.create(OrderProduct, {
-          product_id: allOrderProducts.find(p => p.name === o.product)!.id,
-          product_value: o.product_value,
-          product_quantity: o.product_quantity,
-          restaurant_visit_id: restaurantVisit!.id,
+          comments,
+          score,
+          date,
+          order_total: order.reduce((acc, curr) => {
+            return acc + curr.product_quantity * curr.product_value;
+          }, 0),
         });
-      });
 
-      await entityManager.save(OrderProduct, orderProducts);
-    });
+        await entityManager.save(RestaurantVisit, newVisit);
 
-    if (!restaurantVisit) {
-      throw new Error();
-    }
+        const allProducts = await entityManager
+          .getCustomRepository(RestaurantProductRepository)
+          .findManyOrCreate({
+            restaurantId,
+            order,
+          });
+
+        await entityManager
+          .getCustomRepository(OrderProductRepository)
+          .createMany({
+            order,
+            newVisitId: newVisit.id,
+            products: allProducts,
+          });
+
+        return newVisit;
+      },
+    );
 
     return restaurantVisit;
   }

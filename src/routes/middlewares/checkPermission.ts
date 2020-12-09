@@ -23,7 +23,8 @@ const checkPermission = async (
     });
 
     req.restaurant = {
-      restaurant,
+      restaurantId: restaurant.id,
+      restaurantDetailId: restaurant.detail_id,
     };
 
     return next();

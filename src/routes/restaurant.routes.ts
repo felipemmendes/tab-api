@@ -1,56 +1,43 @@
 import { Router } from 'express';
 
-import ProductController from './controllers/ProductController';
-import RestaurantController from './controllers/RestaurantController';
-import VisitController from './controllers/VisitController';
+import restaurantVisitRoutes from './restaurant.visit.routes';
+import restaurantOrderRoutes from './restaurant.order.routes';
+import restaurantProductRoutes from './restaurant.product.routes';
 import checkPermission from './middlewares/checkPermission';
+import RestaurantController from './controllers/RestaurantController';
 
 const restaurantRouter = Router();
-const productController = new ProductController();
 const restaurantController = new RestaurantController();
-const visitController = new VisitController();
 
-restaurantRouter.get('/', restaurantController.index);
 restaurantRouter.post('/', restaurantController.create);
+restaurantRouter.get('/', restaurantController.index);
 restaurantRouter.get(
   '/:restaurantId',
   checkPermission,
   restaurantController.show,
-);
-restaurantRouter.post(
-  '/:restaurantId',
-  checkPermission,
-  visitController.create,
 );
 restaurantRouter.put(
   '/:restaurantId',
   checkPermission,
   restaurantController.update,
 );
-restaurantRouter.get(
+
+restaurantRouter.use(
   '/:restaurantId/visits',
   checkPermission,
-  visitController.index,
+  restaurantVisitRoutes,
 );
-restaurantRouter.get(
-  '/:restaurantId/visits/:visitId',
+
+restaurantRouter.use(
+  '/:restaurantId/visits',
   checkPermission,
-  visitController.show,
+  restaurantOrderRoutes,
 );
-restaurantRouter.get(
+
+restaurantRouter.use(
   '/:restaurantId/products',
   checkPermission,
-  productController.index,
-);
-restaurantRouter.post(
-  '/:restaurantId/products',
-  checkPermission,
-  productController.create,
-);
-restaurantRouter.get(
-  '/:restaurantId/products/:productId',
-  checkPermission,
-  productController.show,
+  restaurantProductRoutes,
 );
 
 export default restaurantRouter;

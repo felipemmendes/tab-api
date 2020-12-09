@@ -4,7 +4,8 @@ declare namespace Express {
       userId: string;
     };
     restaurant: {
-      restaurant: import('../database/models/Restaurant').default;
+      restaurantId: string;
+      restaurantDetailId: string;
     };
   }
 }
