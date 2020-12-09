@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import OrderProduct from './OrderProduct';
+import Order from './Order';
 import Restaurant from './Restaurant';
 
-@Entity('restaurant_visits')
-class RestaurantVisit {
+@Entity('visits')
+class Visit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -25,25 +25,21 @@ class RestaurantVisit {
   @Column()
   comments: string;
 
-  @OneToMany(
-    () => OrderProduct,
-    orderProduct => orderProduct.restaurant_visit,
-    {
-      eager: true,
-    },
-  )
-  order: OrderProduct[];
+  @OneToMany(() => Order, order => order.visit, {
+    eager: true,
+  })
+  order: Order[];
 
   @Column('decimal', {
     precision: 6,
     scale: 2,
   })
-  order_total: number;
+  total: number;
 
   @Column()
   restaurant_id: string;
 
-  @ManyToOne(() => Restaurant, restaurant => restaurant.restaurant_visits)
+  @ManyToOne(() => Restaurant, restaurant => restaurant.visits)
   @JoinColumn({ name: 'restaurant_id', referencedColumnName: 'id' })
   restaurant: Restaurant;
 
@@ -54,4 +50,4 @@ class RestaurantVisit {
   updated_at: Date;
 }
 
-export default RestaurantVisit;
+export default Visit;

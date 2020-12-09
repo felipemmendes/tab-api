@@ -18,7 +18,7 @@ interface Request {
   };
 }
 
-class CreateUserRestaurant {
+class CreateRestaurant {
   public async execute({
     userId,
     restaurantOptions,
@@ -26,7 +26,7 @@ class CreateUserRestaurant {
     const restaurantRepository = getRepository(Restaurant);
 
     const { name, restaurantDetail } = restaurantOptions;
-    const nameSlug = slugify(name, {
+    const slug = slugify(name, {
       remove: /[*+~.,;\\/(){}[\]_'´`^¨°"!?:@#]/g,
       lower: true,
     });
@@ -34,7 +34,7 @@ class CreateUserRestaurant {
     const exists = await restaurantRepository.findOne({
       where: {
         user_id: userId,
-        name_slug: nameSlug,
+        slug,
       },
     });
 
@@ -47,7 +47,7 @@ class CreateUserRestaurant {
 
     const restaurant = restaurantRepository.create({
       name,
-      name_slug: nameSlug,
+      slug,
       user_id: userId,
       detail: restaurantDetail,
     });
@@ -58,4 +58,4 @@ class CreateUserRestaurant {
   }
 }
 
-export default CreateUserRestaurant;
+export default CreateRestaurant;

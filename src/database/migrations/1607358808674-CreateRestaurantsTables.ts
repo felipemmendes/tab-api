@@ -1,44 +1,37 @@
 import {
-  TableColumn,
   MigrationInterface,
   QueryRunner,
   Table,
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateRestaurantDetailTable1607367150217
+export default class CreateRestaurantsTables1607358808674
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'restaurant_details',
+        name: 'restaurants',
         columns: [
           {
             name: 'id',
             type: 'uuid',
-            isPrimary: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
+            isUnique: true,
           },
           {
-            name: 'description',
+            name: 'name',
             type: 'varchar',
           },
           {
-            name: 'website',
+            name: 'slug',
             type: 'varchar',
+            isPrimary: true,
           },
           {
-            name: 'instagram',
-            type: 'varchar',
-          },
-          {
-            name: 'contact_number',
-            type: 'varchar',
-          },
-          {
-            name: 'menu',
-            type: 'varchar',
+            name: 'user_id',
+            type: 'uuid',
+            isPrimary: true,
           },
           {
             name: 'created_at',
@@ -54,21 +47,13 @@ export default class CreateRestaurantDetailTable1607367150217
       }),
     );
 
-    await queryRunner.addColumn(
-      'restaurants',
-      new TableColumn({
-        name: 'detail_id',
-        type: 'uuid',
-      }),
-    );
-
     await queryRunner.createForeignKey(
       'restaurants',
       new TableForeignKey({
-        name: 'restaurant_detail',
-        columnNames: ['detail_id'],
+        name: 'restaurant_user',
+        columnNames: ['user_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'restaurant_details',
+        referencedTableName: 'users',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }),
@@ -76,8 +61,7 @@ export default class CreateRestaurantDetailTable1607367150217
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('restaurants', 'restaurant_detail');
-    await queryRunner.dropColumn('restaurants', 'detail_id');
-    await queryRunner.dropTable('restaurant_details');
+    await queryRunner.dropForeignKey('restaurants', 'restaurant_user');
+    await queryRunner.dropTable('restaurants');
   }
 }

@@ -1,5 +1,5 @@
 import { EntityRepository, In, Repository } from 'typeorm';
-import RestaurantProduct from '../models/RestaurantProduct';
+import Product from '../models/Product';
 
 interface CreateMany {
   restaurantId: string;
@@ -15,12 +15,12 @@ interface CreateOne {
   product_name: string;
 }
 
-@EntityRepository(RestaurantProduct)
-class RestaurantProductRepository extends Repository<RestaurantProduct> {
+@EntityRepository(Product)
+class ProductRepository extends Repository<Product> {
   public async findOneOrCreate({
     restaurantId,
     product_name,
-  }: CreateOne): Promise<RestaurantProduct> {
+  }: CreateOne): Promise<Product> {
     const exists = await this.findOne({
       where: {
         name: product_name,
@@ -45,7 +45,7 @@ class RestaurantProductRepository extends Repository<RestaurantProduct> {
   public async findManyOrCreate({
     restaurantId,
     order,
-  }: CreateMany): Promise<RestaurantProduct[]> {
+  }: CreateMany): Promise<Product[]> {
     const orderProductsNames = order.map(o => o.product_name);
 
     const existentProducts = await this.find({
@@ -74,4 +74,4 @@ class RestaurantProductRepository extends Repository<RestaurantProduct> {
     return allOrderProducts;
   }
 }
-export default RestaurantProductRepository;
+export default ProductRepository;

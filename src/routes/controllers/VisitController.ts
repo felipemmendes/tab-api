@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 
-import CreateRestaurantVisit from '../../services/CreateRestaurantVisit';
-import ListRestaurantVisits from '../../services/ListRestaurantVisits';
-import ShowRestaurantVisit from '../../services/ShowRestaurantVisit';
-import UpdateRestaurantVisit from '../../services/UpdateRestaurantVisit';
+import CreateVisit from '../../services/CreateVisit';
+import ListVisits from '../../services/ListVisits';
+import ShowVisit from '../../services/ShowVisit';
+import UpdateVisit from '../../services/UpdateVisit';
 
 class VisitController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -11,48 +11,48 @@ class VisitController {
     const { restaurantId } = req.restaurant;
     const { visitOptions } = req.body;
 
-    const createRestaurantVisit = new CreateRestaurantVisit();
+    const createVisit = new CreateVisit();
 
-    const restaurantVisit = await createRestaurantVisit.execute({
+    const visit = await createVisit.execute({
       userId,
       restaurantId,
       visitOptions,
     });
 
-    return res.status(200).json(restaurantVisit);
+    return res.status(200).json(visit);
   }
 
   public async index(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
 
-    const listRestaurantVisits = new ListRestaurantVisits();
+    const listVisits = new ListVisits();
 
-    const restaurantVisit = await listRestaurantVisits.execute({
+    const visits = await listVisits.execute({
       restaurantId,
     });
 
-    return res.status(200).json(restaurantVisit);
+    return res.status(200).json(visits);
   }
 
   public async show(req: Request, res: Response): Promise<Response> {
     const { visitId } = req.params;
 
-    const showRestaurantVisit = new ShowRestaurantVisit();
+    const showVisit = new ShowVisit();
 
-    const restaurantVisit = await showRestaurantVisit.execute({
+    const visit = await showVisit.execute({
       visitId,
     });
 
-    return res.status(200).json(restaurantVisit);
+    return res.status(200).json(visit);
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
     const { visitId } = req.params;
     const { visitOptions } = req.body;
 
-    const updateRestaurantVisit = new UpdateRestaurantVisit();
+    const updateVisit = new UpdateVisit();
 
-    await updateRestaurantVisit.execute({ visitId, visitOptions });
+    await updateVisit.execute({ visitId, visitOptions });
 
     return res.sendStatus(200);
   }

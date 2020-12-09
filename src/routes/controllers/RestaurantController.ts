@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
 
-import CreateUserRestaurant from '../../services/CreateUserRestaurant';
-import ListUserRestaurants from '../../services/ListUserRestaurants';
-import ShowUserRestaurant from '../../services/ShowUserRestaurant';
-import UpdateUserRestaurant from '../../services/UpdateUserRestaurant';
+import CreateRestaurant from '../../services/CreateRestaurant';
+import ListRestaurants from '../../services/ListRestaurants';
+import ShowRestaurant from '../../services/ShowRestaurant';
+import UpdateRestaurant from '../../services/UpdateRestaurant';
+import DeleteRestaurant from '../../services/DeleteRestaurant';
 
 class RestaurantController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
     const { restaurantOptions } = req.body;
 
-    const createUserRestaurants = new CreateUserRestaurant();
+    const createRestaurants = new CreateRestaurant();
 
-    const restaurant = await createUserRestaurants.execute({
+    const restaurant = await createRestaurants.execute({
       userId,
       restaurantOptions,
     });
@@ -23,9 +24,9 @@ class RestaurantController {
   public async index(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
 
-    const listUserRestaurants = new ListUserRestaurants();
+    const listRestaurants = new ListRestaurants();
 
-    const restaurants = await listUserRestaurants.execute({ userId });
+    const restaurants = await listRestaurants.execute({ userId });
 
     return res.json(restaurants);
   }
@@ -33,9 +34,9 @@ class RestaurantController {
   public async show(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
 
-    const showUserRestaurant = new ShowUserRestaurant();
+    const showRestaurant = new ShowRestaurant();
 
-    const restaurant = await showUserRestaurant.execute({ restaurantId });
+    const restaurant = await showRestaurant.execute({ restaurantId });
 
     return res.json(restaurant);
   }
@@ -44,13 +45,23 @@ class RestaurantController {
     const { restaurantId, restaurantDetailId } = req.restaurant;
     const { restaurantOptions } = req.body;
 
-    const updateUserRestaurants = new UpdateUserRestaurant();
+    const updateRestaurants = new UpdateRestaurant();
 
-    await updateUserRestaurants.execute({
+    await updateRestaurants.execute({
       restaurantId,
       restaurantDetailId,
       restaurantOptions,
     });
+
+    return res.sendStatus(200);
+  }
+
+  public async delete(req: Request, res: Response): Promise<Response> {
+    const { restaurantId } = req.restaurant;
+
+    const deleteRestaurant = new DeleteRestaurant();
+
+    await deleteRestaurant.execute({ restaurantId });
 
     return res.sendStatus(200);
   }

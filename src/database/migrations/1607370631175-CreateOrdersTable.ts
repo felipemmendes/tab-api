@@ -5,12 +5,12 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateOrderProductsTable1607370631175
+export default class CreateOrdersTable1607370631175
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'order_products',
+        name: 'orders',
         columns: [
           {
             name: 'id',
@@ -34,7 +34,7 @@ export default class CreateOrderProductsTable1607370631175
             type: 'int',
           },
           {
-            name: 'restaurant_visit_id',
+            name: 'visit_id',
             type: 'uuid',
           },
           {
@@ -51,38 +51,46 @@ export default class CreateOrderProductsTable1607370631175
       }),
     );
 
-    await queryRunner.createForeignKeys('order_products', [
+    await queryRunner.createForeignKeys('orders', [
       new TableForeignKey({
         name: 'order_product',
         columnNames: ['product_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'products',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }),
       new TableForeignKey({
         name: 'order_visit',
-        columnNames: ['restaurant_visit_id'],
+        columnNames: ['visit_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'restaurant_visits',
+        referencedTableName: 'visits',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }),
     ]);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKeys('order_products', [
+    await queryRunner.dropForeignKeys('orders', [
       new TableForeignKey({
         name: 'order_product',
         columnNames: ['product_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'products',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }),
       new TableForeignKey({
         name: 'order_visit',
-        columnNames: ['restaurant_visit_id'],
+        columnNames: ['visit_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'restaurant_visits',
+        referencedTableName: 'visits',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }),
     ]);
 
-    await queryRunner.dropTable('order_products');
+    await queryRunner.dropTable('orders');
   }
 }

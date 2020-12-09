@@ -12,8 +12,8 @@ import {
 } from 'typeorm';
 import User from './User';
 import RestaurantDetail from './RestaurantDetail';
-import RestaurantVisit from './RestaurantVisit';
-import RestaurantProduct from './RestaurantProduct';
+import Visit from './Visit';
+import Product from './Product';
 
 @Entity('restaurants')
 class Restaurant {
@@ -25,7 +25,7 @@ class Restaurant {
   name: string;
 
   @PrimaryColumn()
-  name_slug: string;
+  slug: string;
 
   @PrimaryColumn()
   user_id: string;
@@ -41,11 +41,11 @@ class Restaurant {
   @JoinColumn({ name: 'detail_id' })
   detail: RestaurantDetail;
 
-  @OneToMany(() => RestaurantVisit, visit => visit.restaurant)
-  restaurant_visits: RestaurantVisit[];
+  @OneToMany(() => Visit, visit => visit.restaurant)
+  visits: Visit[];
 
-  @OneToMany(() => RestaurantProduct, products => products.restaurant)
-  restaurant_products: RestaurantProduct[];
+  @OneToMany(() => Product, products => products.restaurant)
+  products: Product[];
 
   @CreateDateColumn()
   created_at: Date;

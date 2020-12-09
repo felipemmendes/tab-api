@@ -5,12 +5,12 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreateRestaurantVisitsTable1607370599177
+export default class CreateProductsTable1607370620612
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'restaurant_visits',
+        name: 'products',
         columns: [
           {
             name: 'id',
@@ -20,56 +20,32 @@ export default class CreateRestaurantVisitsTable1607370599177
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'date',
-            type: 'timestamp',
-          },
-          {
-            name: 'score',
-            type: 'integer',
-          },
-          {
-            name: 'comments',
+            name: 'name',
             type: 'varchar',
-          },
-          {
-            name: 'order_total',
-            type: 'decimal',
-            precision: 6,
-            scale: 2,
           },
           {
             name: 'restaurant_id',
             type: 'uuid',
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamp',
-            default: 'now()',
           },
         ],
       }),
     );
 
     await queryRunner.createForeignKey(
-      'restaurant_visits',
+      'products',
       new TableForeignKey({
-        name: 'restaurant_visit',
+        name: 'restaurant_products',
         columnNames: ['restaurant_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'restaurants',
-        onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('restaurant_visits', 'restaurant_visit');
-    await queryRunner.dropTable('restaurant_visits');
+    await queryRunner.dropForeignKey('products', 'restaurant_products');
+    await queryRunner.dropTable('products');
   }
 }

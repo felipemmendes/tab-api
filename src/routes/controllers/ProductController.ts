@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 
-import CreateRestaurantProduct from '../../services/CreateRestaurantProduct';
-import ListRestaurantProducts from '../../services/ListRestaurantProducts';
-import ShowRestaurantProduct from '../../services/ShowRestaurantProduct';
+import CreateProduct from '../../services/CreateProduct';
+import ListProducts from '../../services/ListProducts';
+import ShowProduct from '../../services/ShowProduct';
 
 class ProductController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
     const { product_name } = req.body;
 
-    const createRestaurantProduct = new CreateRestaurantProduct();
+    const createProduct = new CreateProduct();
 
-    const product = await createRestaurantProduct.execute({
+    const product = await createProduct.execute({
       restaurantId,
       product_name,
     });
@@ -22,9 +22,9 @@ class ProductController {
   public async index(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
 
-    const listRestaurantProducts = new ListRestaurantProducts();
+    const listProducts = new ListProducts();
 
-    const products = await listRestaurantProducts.execute({
+    const products = await listProducts.execute({
       restaurantId,
     });
 
@@ -35,9 +35,9 @@ class ProductController {
     const { restaurantId } = req.restaurant;
     const { productId } = req.params;
 
-    const showRestaurantProduct = new ShowRestaurantProduct();
+    const showProduct = new ShowProduct();
 
-    const product = await showRestaurantProduct.execute({
+    const product = await showProduct.execute({
       restaurantId,
       productId,
     });

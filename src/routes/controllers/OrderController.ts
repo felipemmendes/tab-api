@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import CreateVisitOrder from '../../services/CreateVisitOrder';
-import UpdateVisitOrder from '../../services/UpdateVisitOrder';
-import DeleteVisitOrder from '../../services/DeleteVisitOrder';
+import CreateOrder from '../../services/CreateOrder';
+import UpdateOrder from '../../services/UpdateOrder';
+import DeleteOrder from '../../services/DeleteOrder';
 
 class OrderController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -10,15 +10,15 @@ class OrderController {
     const { visitId } = req.params;
     const { order } = req.body;
 
-    const createVisitOrder = new CreateVisitOrder();
+    const createOrder = new CreateOrder();
 
-    const visitOrder = await createVisitOrder.execute({
+    const newOrder = await createOrder.execute({
       restaurantId,
       visitId,
       order,
     });
 
-    return res.json(visitOrder);
+    return res.json(newOrder);
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
@@ -26,9 +26,9 @@ class OrderController {
     const { visitId, orderId } = req.params;
     const { orderOptions } = req.body;
 
-    const updateVisitOrder = new UpdateVisitOrder();
+    const updateOrder = new UpdateOrder();
 
-    await updateVisitOrder.execute({
+    await updateOrder.execute({
       restaurantId,
       visitId,
       orderId,
@@ -41,9 +41,9 @@ class OrderController {
   public async delete(req: Request, res: Response): Promise<Response> {
     const { orderId, visitId } = req.params;
 
-    const deleteVisitOrder = new DeleteVisitOrder();
+    const deleteOrder = new DeleteOrder();
 
-    await deleteVisitOrder.execute({
+    await deleteOrder.execute({
       orderId,
       visitId,
     });

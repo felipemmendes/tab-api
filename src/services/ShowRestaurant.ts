@@ -7,7 +7,7 @@ interface Request {
   restaurantId: string;
 }
 
-class ListUserRestaurants {
+class ShowRestaurant {
   public async execute({ restaurantId }: Request): Promise<Restaurant> {
     const restaurantRepository = getRepository(Restaurant);
 
@@ -29,4 +29,4 @@ class ListUserRestaurants {
   }
 }
 
-export default ListUserRestaurants;
+export default ShowRestaurant;

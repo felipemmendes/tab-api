@@ -17,7 +17,7 @@ interface Request {
   };
 }
 
-class UpdateUserRestaurant {
+class UpdateRestaurant {
   public async execute({
     restaurantId,
     restaurantDetailId,
@@ -32,10 +32,10 @@ class UpdateUserRestaurant {
       website,
     } = restaurantOptions;
 
-    let nameSlug = '';
+    let slug = '';
 
     if (name) {
-      nameSlug = slugify(name, {
+      slug = slugify(name, {
         remove: /[*+~.,;\\/(){}[\]_'´`^¨°"!?:@#]/g,
         lower: true,
       });
@@ -50,7 +50,7 @@ class UpdateUserRestaurant {
         {
           ...(name && {
             name,
-            name_slug: nameSlug,
+            slug,
           }),
         },
       );
@@ -72,4 +72,4 @@ class UpdateUserRestaurant {
   }
 }
 
-export default UpdateUserRestaurant;
+export default UpdateRestaurant;

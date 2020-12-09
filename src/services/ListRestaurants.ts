@@ -6,7 +6,7 @@ interface Request {
   userId: string;
 }
 
-class ListUserRestaurants {
+class ListRestaurants {
   public async execute({ userId }: Request): Promise<Restaurant[]> {
     const restaurantRepository = getRepository(Restaurant);
 
@@ -20,4 +20,4 @@ class ListUserRestaurants {
   }
 }
 
-export default ListUserRestaurants;
+export default ListRestaurants;

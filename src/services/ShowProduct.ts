@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import RestaurantProduct from '../database/models/RestaurantProduct';
+import Product from '../database/models/Product';
 import CustomError from '../errors/CustomError';
 
 interface Request {
@@ -8,12 +8,9 @@ interface Request {
   productId: string;
 }
 
-class ShowRestaurantProduct {
-  public async execute({
-    restaurantId,
-    productId,
-  }: Request): Promise<RestaurantProduct> {
-    const productRepository = getRepository(RestaurantProduct);
+class ShowProduct {
+  public async execute({ restaurantId, productId }: Request): Promise<Product> {
+    const productRepository = getRepository(Product);
 
     try {
       const product = await productRepository
@@ -24,7 +21,7 @@ class ShowRestaurantProduct {
           'o.id',
           'o.product_value',
           'o.product_quantity',
-          'o.restaurant_visit_id',
+          'o.visit_id',
         ])
         .leftJoin('p.orders', 'o')
         .where('p.id = :productId', { productId })
@@ -45,4 +42,4 @@ class ShowRestaurantProduct {
   }
 }
 
-export default ShowRestaurantProduct;
+export default ShowProduct;

@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import OrderProduct from '../models/OrderProduct';
-import RestaurantProduct from '../models/RestaurantProduct';
+import Order from '../models/Order';
+import Product from '../models/Product';
 
 interface CreateMany {
   newVisitId: string;
@@ -9,7 +9,7 @@ interface CreateMany {
     product_value: number;
     product_quantity: number;
   }[];
-  products: RestaurantProduct[];
+  products: Product[];
 }
 
 interface CustomUpdate {
@@ -19,19 +19,19 @@ interface CustomUpdate {
   product_quantity: number;
 }
 
-@EntityRepository(OrderProduct)
-class OrderProductRepository extends Repository<OrderProduct> {
+@EntityRepository(Order)
+class OrderRepository extends Repository<Order> {
   public async createMany({
     newVisitId,
     order,
     products,
-  }: CreateMany): Promise<OrderProduct[]> {
+  }: CreateMany): Promise<Order[]> {
     const orderProducts = order.map(o => {
       return this.create({
         product_id: products.find(p => p.name === o.product_name)!.id,
         product_value: o.product_value,
         product_quantity: o.product_quantity,
-        restaurant_visit_id: newVisitId,
+        visit_id: newVisitId,
       });
     });
 
@@ -58,4 +58,4 @@ class OrderProductRepository extends Repository<OrderProduct> {
     );
   }
 }
-export default OrderProductRepository;
+export default OrderRepository;

@@ -1,8 +1,8 @@
 import { getManager } from 'typeorm';
 
-import RestaurantVisit from '../database/models/RestaurantVisit';
-import RestaurantProductRepository from '../database/repositories/RestaurantProductRepository';
-import OrderProductRepository from '../database/repositories/OrderProductRepository';
+import Visit from '../database/models/Visit';
+import ProductRepository from '../database/repositories/ProductRepository';
+import OrderRepository from '../database/repositories/OrderRepository';
 
 interface Request {
   userId: string;
@@ -23,35 +23,33 @@ class CreateVisit {
   public async execute({
     restaurantId,
     visitOptions: { order, score, comments, date },
-  }: Request): Promise<RestaurantVisit> {
+  }: Request): Promise<Visit> {
     const restaurantVisit = await getManager().transaction(
       async entityManager => {
-        const newVisit = entityManager.create(RestaurantVisit, {
+        const newVisit = entityManager.create(Visit, {
           restaurant_id: restaurantId,
           comments,
           score,
           date,
-          order_total: order.reduce((acc, curr) => {
+          total: order.reduce((acc, curr) => {
             return acc + curr.product_quantity * curr.product_value;
           }, 0),
         });
 
-        await entityManager.save(RestaurantVisit, newVisit);
+        await entityManager.save(Visit, newVisit);
 
         const allProducts = await entityManager
-          .getCustomRepository(RestaurantProductRepository)
+          .getCustomRepository(ProductRepository)
           .findManyOrCreate({
             restaurantId,
             order,
           });
 
-        await entityManager
-          .getCustomRepository(OrderProductRepository)
-          .createMany({
-            order,
-            newVisitId: newVisit.id,
-            products: allProducts,
-          });
+        await entityManager.getCustomRepository(OrderRepository).createMany({
+          order,
+          newVisitId: newVisit.id,
+          products: allProducts,
+        });
 
         return newVisit;
       },

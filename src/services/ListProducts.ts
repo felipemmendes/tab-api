@@ -1,16 +1,14 @@
 import { getRepository } from 'typeorm';
 
-import RestaurantProduct from '../database/models/RestaurantProduct';
+import Product from '../database/models/Product';
 
 interface Request {
   restaurantId: string;
 }
 
-class ListRestaurantProducts {
-  public async execute({
-    restaurantId,
-  }: Request): Promise<RestaurantProduct[]> {
-    const productRepository = getRepository(RestaurantProduct);
+class ListProducts {
+  public async execute({ restaurantId }: Request): Promise<Product[]> {
+    const productRepository = getRepository(Product);
 
     const products = await productRepository
       .createQueryBuilder('p')
@@ -23,4 +21,4 @@ class ListRestaurantProducts {
   }
 }
 
-export default ListRestaurantProducts;
+export default ListProducts;

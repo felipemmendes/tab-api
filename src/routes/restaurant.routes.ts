@@ -21,6 +21,11 @@ restaurantRouter.put(
   checkPermission,
   restaurantController.update,
 );
+restaurantRouter.delete(
+  '/:restaurantId',
+  checkPermission,
+  restaurantController.delete,
+);
 
 restaurantRouter.use(
   '/:restaurantId/visits',

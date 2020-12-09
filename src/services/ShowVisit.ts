@@ -1,15 +1,15 @@
 import { getRepository } from 'typeorm';
 
-import RestaurantVisit from '../database/models/RestaurantVisit';
+import Visit from '../database/models/Visit';
 import CustomError from '../errors/CustomError';
 
 interface Request {
   visitId: string;
 }
 
-class ShowRestaurantVisit {
-  public async execute({ visitId }: Request): Promise<RestaurantVisit> {
-    const visitRepository = getRepository(RestaurantVisit);
+class ShowVisit {
+  public async execute({ visitId }: Request): Promise<Visit> {
+    const visitRepository = getRepository(Visit);
     try {
       const visit = await visitRepository
         .createQueryBuilder('v')
@@ -18,14 +18,14 @@ class ShowRestaurantVisit {
           'v.date',
           'v.comments',
           'v.score',
-          'v.order_total',
+          'v.total',
           'o.id',
           'o.product_value',
           'o.product_quantity',
           'p.name',
         ])
-        .innerJoin('v.order', 'o')
-        .innerJoin('o.product', 'p')
+        .leftJoin('v.order', 'o')
+        .leftJoin('o.product', 'p')
         .where('v.id = :visitId', { visitId })
         .getOneOrFail();
 
@@ -43,4 +43,4 @@ class ShowRestaurantVisit {
   }
 }
 
-export default ShowRestaurantVisit;
+export default ShowVisit;

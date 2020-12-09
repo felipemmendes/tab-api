@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import CustomError from '../../errors/CustomError';
-import RestaurantVisit from '../models/RestaurantVisit';
+import Visit from '../models/Visit';
 
 interface CustomUpdate {
   visitId: string;
@@ -15,8 +15,8 @@ interface UpdateTotal {
   visitId: string;
 }
 
-@EntityRepository(RestaurantVisit)
-class RestaurantVisitRepository extends Repository<RestaurantVisit> {
+@EntityRepository(Visit)
+class VisitRepository extends Repository<Visit> {
   public async customUpdate({
     visitId,
     visitOptions,
@@ -51,7 +51,7 @@ class RestaurantVisitRepository extends Repository<RestaurantVisit> {
       return acc + curr.product_quantity * curr.product_value;
     }, 0);
 
-    await this.update({ id: visitId }, { order_total: orderTotal });
+    await this.update({ id: visitId }, { total: orderTotal });
   }
 }
-export default RestaurantVisitRepository;
+export default VisitRepository;
