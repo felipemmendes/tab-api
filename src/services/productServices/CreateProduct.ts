@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
-import Product from '../database/models/Product';
-import ProductRepository from '../database/repositories/ProductRepository';
+import Product from '../../database/models/Product';
+import ProductRepository from '../../database/repositories/ProductRepository';
 
 interface Request {
   restaurantId: string;

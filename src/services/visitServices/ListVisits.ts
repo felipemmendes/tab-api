@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import Visit from '../database/models/Visit';
+import Visit from '../../database/models/Visit';
 
 interface Request {
   restaurantId: string;

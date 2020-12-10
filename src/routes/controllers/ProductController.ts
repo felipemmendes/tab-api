@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
 
-import CreateProduct from '../../services/CreateProduct';
-import ListProducts from '../../services/ListProducts';
-import ShowProduct from '../../services/ShowProduct';
+import CreateProduct from '../../services/productServices/CreateProduct';
+import DeleteProduct from '../../services/productServices/DeleteProduct';
+import ListProducts from '../../services/productServices/ListProducts';
+import ShowProduct from '../../services/productServices/ShowProduct';
+import UpdateProduct from '../../services/productServices/UpdateProduct';
 
 class ProductController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -32,17 +34,41 @@ class ProductController {
   }
 
   public async show(req: Request, res: Response): Promise<Response> {
-    const { restaurantId } = req.restaurant;
     const { productId } = req.params;
 
     const showProduct = new ShowProduct();
 
     const product = await showProduct.execute({
-      restaurantId,
       productId,
     });
 
     return res.json(product);
+  }
+
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { restaurantId } = req.restaurant;
+    const { productId } = req.params;
+    const { new_product_name } = req.body;
+
+    const updateProduct = new UpdateProduct();
+
+    await updateProduct.execute({
+      restaurantId,
+      productId,
+      newName: new_product_name,
+    });
+
+    return res.sendStatus(200);
+  }
+
+  public async delete(req: Request, res: Response): Promise<Response> {
+    const { productId } = req.params;
+
+    const deleteProduct = new DeleteProduct();
+
+    await deleteProduct.execute({ productId });
+
+    return res.sendStatus(200);
   }
 }
 

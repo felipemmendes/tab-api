@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 
-import CreateVisit from '../../services/CreateVisit';
-import ListVisits from '../../services/ListVisits';
-import ShowVisit from '../../services/ShowVisit';
-import UpdateVisit from '../../services/UpdateVisit';
+import CreateVisit from '../../services/visitServices/CreateVisit';
+import DeleteVisit from '../../services/visitServices/DeleteVisit';
+import ListVisits from '../../services/visitServices/ListVisits';
+import ShowVisit from '../../services/visitServices/ShowVisit';
+import UpdateVisit from '../../services/visitServices/UpdateVisit';
 
 class VisitController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -53,6 +54,16 @@ class VisitController {
     const updateVisit = new UpdateVisit();
 
     await updateVisit.execute({ visitId, visitOptions });
+
+    return res.sendStatus(200);
+  }
+
+  public async delete(req: Request, res: Response): Promise<Response> {
+    const { visitId } = req.params;
+
+    const deleteVisit = new DeleteVisit();
+
+    await deleteVisit.execute({ visitId });
 
     return res.sendStatus(200);
   }

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 
-import CreateRestaurant from '../../services/CreateRestaurant';
-import ListRestaurants from '../../services/ListRestaurants';
-import ShowRestaurant from '../../services/ShowRestaurant';
-import UpdateRestaurant from '../../services/UpdateRestaurant';
-import DeleteRestaurant from '../../services/DeleteRestaurant';
+import CreateRestaurant from '../../services/restaurantServices/CreateRestaurant';
+import ListRestaurants from '../../services/restaurantServices/ListRestaurants';
+import ShowRestaurant from '../../services/restaurantServices/ShowRestaurant';
+import UpdateRestaurant from '../../services/restaurantServices/UpdateRestaurant';
+import DeleteRestaurant from '../../services/restaurantServices/DeleteRestaurant';
 
 class RestaurantController {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -42,14 +42,13 @@ class RestaurantController {
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    const { restaurantId, restaurantDetailId } = req.restaurant;
+    const { restaurantId } = req.restaurant;
     const { restaurantOptions } = req.body;
 
     const updateRestaurants = new UpdateRestaurant();
 
     await updateRestaurants.execute({
       restaurantId,
-      restaurantDetailId,
       restaurantOptions,
     });
 

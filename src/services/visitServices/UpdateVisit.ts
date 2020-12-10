@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 
-import VisitRepository from '../database/repositories/VisitRepository';
+import VisitRepository from '../../database/repositories/VisitRepository';
 
 interface Request {
   visitId: string;

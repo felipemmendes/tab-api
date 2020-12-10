@@ -9,6 +9,12 @@ const exceptionHandler = (): ErrorRequestHandler => {
         .json({ status: 'error', message: error.message });
     }
 
+    if (error.name === 'EntityNotFound') {
+      return res
+        .status(404)
+        .json({ status: 'error', message: 'Resource not found' });
+    }
+
     console.error(error);
 
     return res

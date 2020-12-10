@@ -1,8 +1,8 @@
 import { getRepository } from 'typeorm';
 import slugify from 'slugify';
 
-import Restaurant from '../database/models/Restaurant';
-import CustomError from '../errors/CustomError';
+import Restaurant from '../../database/models/Restaurant';
+import CustomError from '../../errors/CustomError';
 
 interface Request {
   userId: string;

@@ -1,7 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import Restaurant from '../database/models/Restaurant';
-import CustomError from '../errors/CustomError';
+import Restaurant from '../../database/models/Restaurant';
 
 interface Request {
   restaurantId: string;
@@ -11,19 +10,12 @@ class ShowRestaurant {
   public async execute({ restaurantId }: Request): Promise<Restaurant> {
     const restaurantRepository = getRepository(Restaurant);
 
-    const restaurant = await restaurantRepository.findOne({
+    const restaurant = await restaurantRepository.findOneOrFail({
       where: {
         id: restaurantId,
       },
       relations: ['detail'],
     });
-
-    if (!restaurant) {
-      throw new CustomError({
-        message: 'Restaurant not found.',
-        statusCode: 404,
-      });
-    }
 
     return restaurant;
   }

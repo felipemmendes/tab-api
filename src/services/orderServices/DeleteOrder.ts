@@ -1,6 +1,6 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-import Order from '../database/models/Order';
-import VisitRepository from '../database/repositories/VisitRepository';
+import Order from '../../database/models/Order';
+import VisitRepository from '../../database/repositories/VisitRepository';
 
 interface Request {
   orderId: string;
@@ -9,10 +9,10 @@ interface Request {
 
 class DeleteOrder {
   public async execute({ orderId, visitId }: Request): Promise<void> {
-    const orderProduct = getRepository(Order);
+    const orderRepository = getRepository(Order);
     const visitRepository = getCustomRepository(VisitRepository);
 
-    await orderProduct.delete(orderId);
+    await orderRepository.delete(orderId);
 
     await visitRepository.updateTotal({ visitId });
   }

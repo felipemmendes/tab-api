@@ -8,5 +8,7 @@ const productController = new ProductController();
 restaurantProductRouter.get('/', productController.index);
 restaurantProductRouter.post('/', productController.create);
 restaurantProductRouter.get('/:productId', productController.show);
+restaurantProductRouter.put('/:productId', productController.update);
+restaurantProductRouter.delete('/:productId', productController.delete);
 
 export default restaurantProductRouter;

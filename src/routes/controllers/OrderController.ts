@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import CreateOrder from '../../services/CreateOrder';
-import UpdateOrder from '../../services/UpdateOrder';
-import DeleteOrder from '../../services/DeleteOrder';
+import CreateOrder from '../../services/orderServices/CreateOrder';
+import UpdateOrder from '../../services/orderServices/UpdateOrder';
+import DeleteOrder from '../../services/orderServices/DeleteOrder';
 
 class OrderController {
   public async create(req: Request, res: Response): Promise<Response> {

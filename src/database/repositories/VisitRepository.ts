@@ -36,16 +36,12 @@ class VisitRepository extends Repository<Visit> {
   }
 
   public async updateTotal({ visitId }: UpdateTotal): Promise<void> {
-    const visitOrder = await this.findOne({
+    const visitOrder = await this.findOneOrFail({
       where: {
         id: visitId,
       },
       relations: ['order'],
     });
-
-    if (!visitOrder) {
-      throw new CustomError({ message: 'Visit not found', statusCode: 404 });
-    }
 
     const orderTotal = visitOrder.order.reduce((acc, curr) => {
       return acc + curr.product_quantity * curr.product_value;

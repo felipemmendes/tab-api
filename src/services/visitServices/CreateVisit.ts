@@ -1,8 +1,8 @@
 import { getManager } from 'typeorm';
 
-import Visit from '../database/models/Visit';
-import ProductRepository from '../database/repositories/ProductRepository';
-import OrderRepository from '../database/repositories/OrderRepository';
+import Visit from '../../database/models/Visit';
+import ProductRepository from '../../database/repositories/ProductRepository';
+import OrderRepository from '../../database/repositories/OrderRepository';
 
 interface Request {
   userId: string;

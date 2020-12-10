@@ -5,7 +5,9 @@ declare namespace Express {
     };
     restaurant: {
       restaurantId: string;
-      restaurantDetailId: string;
+      orderId?: string;
+      visitId?: string;
+      productId?: string;
     };
   }
 }
