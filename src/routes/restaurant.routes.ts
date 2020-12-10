@@ -27,22 +27,10 @@ restaurantRouter.delete(
   restaurantController.delete,
 );
 
-restaurantRouter.use(
-  '/:restaurantId/visits',
-  checkPermission,
-  restaurantVisitRoutes,
-);
+restaurantRouter.use('/', restaurantVisitRoutes);
 
-restaurantRouter.use(
-  '/:restaurantId/visits',
-  checkPermission,
-  restaurantOrderRoutes,
-);
+restaurantRouter.use('/', restaurantOrderRoutes);
 
-restaurantRouter.use(
-  '/:restaurantId/products',
-  checkPermission,
-  restaurantProductRoutes,
-);
+restaurantRouter.use('/', restaurantProductRoutes);
 
 export default restaurantRouter;

@@ -1,14 +1,24 @@
 import { Router } from 'express';
 
 import OrderController from './controllers/OrderController';
+import checkPermission from './middlewares/checkPermission';
 
 const restaurantOrderRouter = Router();
 const orderController = new OrderController();
 
-restaurantOrderRouter.post('/:visitId/orders', orderController.create);
-restaurantOrderRouter.put('/:visitId/orders/:orderId', orderController.update);
+restaurantOrderRouter.post(
+  '/:restaurantId/visits/:visitId/orders',
+  checkPermission,
+  orderController.create,
+);
+restaurantOrderRouter.put(
+  '/:restaurantId/visits/:visitId/orders/:orderId',
+  checkPermission,
+  orderController.update,
+);
 restaurantOrderRouter.delete(
-  '/:visitId/orders/:orderId',
+  '/:restaurantId/visits/:visitId/orders/:orderId',
+  checkPermission,
   orderController.delete,
 );
 

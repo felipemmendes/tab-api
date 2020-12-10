@@ -59,7 +59,7 @@ const checkPermission = async (
       .select('p.id')
       .innerJoin('p.restaurant', 'r')
       .where('p.id = :productId', { productId })
-      .andWhere('v.restaurant_id = :restaurantId', { restaurantId })
+      .andWhere('p.restaurant_id = :restaurantId', { restaurantId })
       .andWhere('r.user_id = :userId', { userId })
       .getOneOrFail();
 

@@ -15,6 +15,7 @@ class ListProducts {
       .select(['p.id', 'p.name'])
       .innerJoin('p.restaurant', 'r')
       .where('p.restaurant_id = :restaurantId', { restaurantId })
+      .orderBy('p.name', 'ASC')
       .getMany();
 
     return products;

@@ -23,10 +23,17 @@ class RestaurantController {
 
   public async index(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
+    const { page } = req.query;
 
     const listRestaurants = new ListRestaurants();
 
-    const restaurants = await listRestaurants.execute({ userId });
+    const restaurants = await listRestaurants.execute({
+      userId,
+      page:
+        Number.isSafeInteger(Number(page)) && Number(page) > 0
+          ? Number(page)
+          : undefined,
+    });
 
     return res.json(restaurants);
   }

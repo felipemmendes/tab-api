@@ -25,11 +25,16 @@ class VisitController {
 
   public async index(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
+    const { page } = req.query;
 
     const listVisits = new ListVisits();
 
     const visits = await listVisits.execute({
       restaurantId,
+      page:
+        Number.isSafeInteger(Number(page)) && Number(page) > 0
+          ? Number(page)
+          : undefined,
     });
 
     return res.status(200).json(visits);
