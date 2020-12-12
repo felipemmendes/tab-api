@@ -23,9 +23,6 @@ class RestaurantDetail {
   @Column()
   contact_number: string;
 
-  @Column()
-  menu: string;
-
   @CreateDateColumn()
   created_at: Date;
 

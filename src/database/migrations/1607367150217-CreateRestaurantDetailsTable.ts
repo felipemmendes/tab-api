@@ -37,10 +37,6 @@ export default class CreateRestaurantDetailsTable1607367150217
             type: 'varchar',
           },
           {
-            name: 'menu',
-            type: 'varchar',
-          },
-          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
