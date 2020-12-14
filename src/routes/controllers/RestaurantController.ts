@@ -23,12 +23,13 @@ class RestaurantController {
 
   public async index(req: Request, res: Response): Promise<Response> {
     const { userId } = req.user;
-    const { page } = req.query;
+    const { name, page } = req.query;
 
     const listRestaurants = new ListRestaurants();
 
     const restaurants = await listRestaurants.execute({
       userId,
+      name: name as string,
       page:
         Number.isSafeInteger(Number(page)) && Number(page) > 0
           ? Number(page)

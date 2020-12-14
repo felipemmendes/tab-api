@@ -13,7 +13,7 @@ class DeleteVisit {
 
     await visitRepository.delete(visitId);
 
-    await invalidateCachePrefix(`list-visits:${restaurantId}:*`);
+    await invalidateCachePrefix(`list-visits:${restaurantId}*`);
   }
 }
 

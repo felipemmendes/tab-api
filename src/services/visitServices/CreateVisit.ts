@@ -56,7 +56,7 @@ class CreateVisit {
       },
     );
 
-    await invalidateCachePrefix(`list-visits:${restaurantId}:*`);
+    await invalidateCachePrefix(`list-visits:${restaurantId}*`);
 
     return restaurantVisit;
   }

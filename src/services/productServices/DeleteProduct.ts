@@ -34,7 +34,7 @@ class DeleteProduct {
       }
     });
 
-    await invalidateCachePrefix(`list-products:${restaurantId}:*`);
+    await invalidateCachePrefix(`list-products:${restaurantId}*`);
   }
 }
 

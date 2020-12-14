@@ -6,27 +6,32 @@ import Restaurant from '../../database/models/Restaurant';
 interface Request {
   userId: string;
   page?: number;
+  name?: string;
 }
 
 class ListRestaurants {
-  public async execute({ userId, page = 1 }: Request): Promise<Restaurant[]> {
+  public async execute({
+    userId,
+    page = 1,
+    name = '',
+  }: Request): Promise<Restaurant[]> {
     const restaurantRepository = getRepository(Restaurant);
 
-    const cacheKey = `list-restaurants:${userId}:${page}`;
+    const cacheKey = `list-restaurants:${userId}-query:${name}-page:${page}`;
 
     let restaurants = await getCache<Restaurant[]>(cacheKey);
 
     if (!restaurants) {
-      restaurants = await restaurantRepository.find({
-        where: {
-          user_id: userId,
-        },
-        order: {
-          name: 'ASC',
-        },
-        take: 5,
-        skip: 5 * (page - 1),
-      });
+      const query = `%${name}%`;
+      restaurants = await restaurantRepository
+        .createQueryBuilder('r')
+        .select()
+        .where('r.user_id = :userId', { userId })
+        .andWhere('r.name ILIKE :query', { query })
+        .orderBy('r.name', 'ASC')
+        .skip(5 * (page - 1))
+        .take(5)
+        .getMany();
 
       cacheClient.set(cacheKey, JSON.stringify(restaurants));
     }

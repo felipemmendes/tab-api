@@ -23,11 +23,13 @@ class ProductController {
 
   public async index(req: Request, res: Response): Promise<Response> {
     const { restaurantId } = req.restaurant;
+    const { name } = req.query;
 
     const listProducts = new ListProducts();
 
     const products = await listProducts.execute({
       restaurantId,
+      name: name as string,
     });
 
     return res.json(products);

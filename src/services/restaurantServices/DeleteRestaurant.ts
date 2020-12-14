@@ -22,7 +22,7 @@ class DeleteRestaurant {
       user_id: restaurant.user_id,
     });
 
-    await invalidateCachePrefix(`list-restaurants:${userId}:*`);
+    await invalidateCachePrefix(`list-restaurants:${userId}*`);
   }
 }
 

@@ -21,7 +21,7 @@ class CreateProduct {
       product_name,
     });
 
-    await invalidateCachePrefix(`list-products:${restaurantId}:*`);
+    await invalidateCachePrefix(`list-products:${restaurantId}*`);
 
     return product;
   }

@@ -55,7 +55,7 @@ class CreateRestaurant {
 
     await restaurantRepository.save(restaurant);
 
-    await invalidateCachePrefix(`list-restaurants:${userId}:*`);
+    await invalidateCachePrefix(`list-restaurants:${userId}*`);
 
     return restaurant;
   }
