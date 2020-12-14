@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import slugify from 'slugify';
 
 import Restaurant from '../../database/models/Restaurant';
+import { invalidateCachePrefix } from '../../database/cache';
 import CustomError from '../../errors/CustomError';
 
 interface Request {
@@ -53,6 +54,8 @@ class CreateRestaurant {
     });
 
     await restaurantRepository.save(restaurant);
+
+    await invalidateCachePrefix(`list-restaurants:${userId}:*`);
 
     return restaurant;
   }

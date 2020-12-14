@@ -1,6 +1,7 @@
 import { getManager } from 'typeorm';
 import slugify from 'slugify';
 
+import { invalidateCachePrefix } from '../../database/cache';
 import Restaurant from '../../database/models/Restaurant';
 import RestaurantDetail from '../../database/models/RestaurantDetail';
 
@@ -72,6 +73,8 @@ class UpdateRestaurant {
         );
       }
     });
+
+    await invalidateCachePrefix(`restaurants:${restaurantId}`);
   }
 }
 

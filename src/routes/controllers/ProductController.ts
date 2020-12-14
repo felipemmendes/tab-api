@@ -62,11 +62,12 @@ class ProductController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
+    const { restaurantId } = req.restaurant;
     const { productId } = req.params;
 
     const deleteProduct = new DeleteProduct();
 
-    await deleteProduct.execute({ productId });
+    await deleteProduct.execute({ restaurantId, productId });
 
     return res.sendStatus(200);
   }

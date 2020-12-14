@@ -1,4 +1,6 @@
 import { getCustomRepository } from 'typeorm';
+
+import { invalidateCachePrefix } from '../../database/cache';
 import Product from '../../database/models/Product';
 import ProductRepository from '../../database/repositories/ProductRepository';
 
@@ -18,6 +20,8 @@ class CreateProduct {
       restaurantId,
       product_name,
     });
+
+    await invalidateCachePrefix(`list-products:${restaurantId}:*`);
 
     return product;
   }

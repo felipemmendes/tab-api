@@ -64,11 +64,12 @@ class VisitController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
+    const { restaurantId } = req.restaurant;
     const { visitId } = req.params;
 
     const deleteVisit = new DeleteVisit();
 
-    await deleteVisit.execute({ visitId });
+    await deleteVisit.execute({ restaurantId, visitId });
 
     return res.sendStatus(200);
   }

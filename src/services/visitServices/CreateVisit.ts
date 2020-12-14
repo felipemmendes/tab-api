@@ -1,5 +1,6 @@
 import { getManager } from 'typeorm';
 
+import { invalidateCachePrefix } from '../../database/cache';
 import Visit from '../../database/models/Visit';
 import ProductRepository from '../../database/repositories/ProductRepository';
 import OrderRepository from '../../database/repositories/OrderRepository';
@@ -54,6 +55,8 @@ class CreateVisit {
         return newVisit;
       },
     );
+
+    await invalidateCachePrefix(`list-visits:${restaurantId}:*`);
 
     return restaurantVisit;
   }

@@ -63,11 +63,12 @@ class RestaurantController {
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
+    const { userId } = req.user;
     const { restaurantId } = req.restaurant;
 
     const deleteRestaurant = new DeleteRestaurant();
 
-    await deleteRestaurant.execute({ restaurantId });
+    await deleteRestaurant.execute({ userId, restaurantId });
 
     return res.sendStatus(200);
   }

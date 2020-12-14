@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 
+import { cacheClient, getCache } from '../../database/cache';
 import Restaurant from '../../database/models/Restaurant';
 
 interface Request {
@@ -10,12 +11,20 @@ class ShowRestaurant {
   public async execute({ restaurantId }: Request): Promise<Restaurant> {
     const restaurantRepository = getRepository(Restaurant);
 
-    const restaurant = await restaurantRepository.findOneOrFail({
-      where: {
-        id: restaurantId,
-      },
-      relations: ['detail'],
-    });
+    const cacheKey = `restaurants:${restaurantId}`;
+
+    let restaurant = await getCache<Restaurant>(cacheKey);
+
+    if (!restaurant) {
+      restaurant = await restaurantRepository.findOneOrFail({
+        where: {
+          id: restaurantId,
+        },
+        relations: ['detail'],
+      });
+
+      cacheClient.set(cacheKey, JSON.stringify(restaurant));
+    }
 
     return restaurant;
   }

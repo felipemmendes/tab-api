@@ -1,5 +1,6 @@
 import { getCustomRepository } from 'typeorm';
 
+import { invalidateCachePrefix } from '../../database/cache';
 import ProductRepository from '../../database/repositories/ProductRepository';
 import CustomError from '../../errors/CustomError';
 
@@ -34,6 +35,8 @@ class UpdateProduct {
     await productRepository.update(productId, {
       name: newName,
     });
+
+    await invalidateCachePrefix(`products:${productId}`);
   }
 }
 
